@@ -1,0 +1,17 @@
+package com.example.currency.gateway.repositories;
+
+import com.example.currency.gateway.domain.XmlRequest;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface XmlRequestRepository extends CrudRepository<XmlRequest, Long> {
+
+    XmlRequest save(XmlRequest jsonRequest);
+
+    Optional<XmlRequest> findById(Long Id);
+
+    boolean existsById(Long id);
+}
