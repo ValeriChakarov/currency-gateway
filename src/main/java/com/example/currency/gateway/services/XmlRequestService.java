@@ -1,7 +1,8 @@
 package com.example.currency.gateway.services;
 
-import com.example.currency.gateway.api.controller.dto.XmlRequestCurrent;
-import com.example.currency.gateway.api.controller.dto.XmlRequestHistory;
+import com.example.currency.gateway.api.controller.dto.xmlcurrent.CommandId;
+import com.example.currency.gateway.api.controller.dto.xmlcurrent.XmlRequestHistory;
+import com.example.currency.gateway.api.controller.dto.xmlhistory.HistoryCommandId;
 import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.domain.XmlRequest;
 import com.example.currency.gateway.repositories.XmlRequestRepository;
@@ -20,25 +21,25 @@ public class XmlRequestService {
     @Autowired
     EuroRatesService euroRatesService;
 
-    public Optional<EuroRates> createCurrentRequest(XmlRequestCurrent xmlRequestCurrent) {
-        if (!xmlRequestRepository.existsById(xmlRequestCurrent.getId())) {
-            XmlRequest xmlRequestToSave = new XmlRequest(xmlRequestCurrent.getId(), xmlRequestCurrent.getConsumer(),
-                    xmlRequestCurrent.getCurrency());
+    public Optional<EuroRates> createCurrentRequest(CommandId commandId) {
+        if (!xmlRequestRepository.existsById(commandId.getId())) {
+            XmlRequest xmlRequestToSave = new XmlRequest(commandId.getId(), commandId.getField().getConsumer(),
+                    commandId.getField().getCurrency().getValue());
             xmlRequestRepository.save(xmlRequestToSave);
         } else {
             throw new RequestIdAlreadyExistsException("A request with this id already exists in the database!");
         }
         return euroRatesService.getCurrentEuroRates();
     }
-    public List<EuroRates> createHistoryRequest(XmlRequestHistory xmlRequestHistory) {
-        if (!xmlRequestRepository.existsById(xmlRequestHistory.getId())) {
-            XmlRequest xmlRequestToSave = new XmlRequest(xmlRequestHistory.getId(), xmlRequestHistory.getConsumer(),
-                    xmlRequestHistory.getCurrency());
+    public List<EuroRates> createHistoryRequest(HistoryCommandId historyCommandId) {
+        if (!xmlRequestRepository.existsById(historyCommandId.getId())) {
+            XmlRequest xmlRequestToSave = new XmlRequest(historyCommandId.getId(), historyCommandId.getHistory().getConsumer(),
+                    historyCommandId.getHistory().getCurrency());
             xmlRequestRepository.save(xmlRequestToSave);
         } else {
             throw new RequestIdAlreadyExistsException("A request with this id already exists in the database!");
         }
-        return euroRatesService.getHistoricalEuroRates(xmlRequestHistory.getPeriod());
+        return euroRatesService.getHistoricalEuroRates(historyCommandId.getHistory().getPeriod());
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.currency.gateway.api.controller.dto;
+package com.example.currency.gateway.api.controller.dto.json;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Value
 @RequiredArgsConstructor
-public class JsonRequestHistory {
+public class JsonRequestCurrent {
 
     @NonNull
     UUID requestId;
@@ -22,7 +22,4 @@ public class JsonRequestHistory {
 
     @NonNull
     String currency;
-
-    @NonNull
-    Integer period;
 }

@@ -1,11 +1,9 @@
 package com.example.currency.gateway.api.controller;
 
-import com.example.currency.gateway.api.controller.dto.JsonRequestCurrent;
-import com.example.currency.gateway.api.controller.dto.JsonRequestHistory;
-import com.example.currency.gateway.api.controller.dto.XmlRequestCurrent;
-import com.example.currency.gateway.api.controller.dto.XmlRequestHistory;
+import com.example.currency.gateway.api.controller.dto.xmlcurrent.CommandId;
+import com.example.currency.gateway.api.controller.dto.xmlcurrent.XmlRequestHistory;
+import com.example.currency.gateway.api.controller.dto.xmlhistory.HistoryCommandId;
 import com.example.currency.gateway.domain.EuroRates;
-import com.example.currency.gateway.domain.XmlRequest;
 import com.example.currency.gateway.services.XmlRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,12 +24,12 @@ public class ExternalServiceTwo {
     XmlRequestService xmlRequestService;
 
     @PostMapping(value ="/current", produces= MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Optional<EuroRates>> createRequestAndGetEURRates(@RequestBody XmlRequestCurrent xmlRequestCurrent){
-        return ResponseEntity.ok(xmlRequestService.createCurrentRequest(xmlRequestCurrent));
+    public ResponseEntity<Optional<EuroRates>> createRequestAndGetEURRates(@RequestBody CommandId commandId){
+        return ResponseEntity.ok(xmlRequestService.createCurrentRequest(commandId));
     }
 
     @PostMapping("/history")
-    public ResponseEntity<List<EuroRates>> createRequestAndGetHistoricalEURRates(@RequestBody XmlRequestHistory xmlRequestHistory){
-        return ResponseEntity.ok(xmlRequestService.createHistoryRequest(xmlRequestHistory));
+    public ResponseEntity<List<EuroRates>> createRequestAndGetHistoricalEURRates(@RequestBody HistoryCommandId historyCommandId){
+        return ResponseEntity.ok(xmlRequestService.createHistoryRequest(historyCommandId));
     }
 }

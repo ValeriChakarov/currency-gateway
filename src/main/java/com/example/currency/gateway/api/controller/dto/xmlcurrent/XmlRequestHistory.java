@@ -1,11 +1,11 @@
-package com.example.currency.gateway.api.controller.dto;
+package com.example.currency.gateway.api.controller.dto.xmlcurrent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
 @RequiredArgsConstructor
-public class XmlRequestCurrent {
+public class XmlRequestHistory {
 
     Long id;
 
@@ -13,4 +13,5 @@ public class XmlRequestCurrent {
 
     String currency;
 
+    Integer period;
 }

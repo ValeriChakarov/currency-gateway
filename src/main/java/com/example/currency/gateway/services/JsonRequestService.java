@@ -1,7 +1,7 @@
 package com.example.currency.gateway.services;
 
-import com.example.currency.gateway.api.controller.dto.JsonRequestCurrent;
-import com.example.currency.gateway.api.controller.dto.JsonRequestHistory;
+import com.example.currency.gateway.api.controller.dto.json.JsonRequestCurrent;
+import com.example.currency.gateway.api.controller.dto.json.JsonRequestHistory;
 import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.domain.JsonRequest;
 import com.example.currency.gateway.repositories.JsonRequestRepository;

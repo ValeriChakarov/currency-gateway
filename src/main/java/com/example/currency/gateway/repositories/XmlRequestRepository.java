@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface XmlRequestRepository extends CrudRepository<XmlRequest, Long> {
+public interface XmlRequestRepository extends CrudRepository<XmlRequest, String> {
 
     XmlRequest save(XmlRequest jsonRequest);
 
-    Optional<XmlRequest> findById(Long Id);
+    Optional<XmlRequest> findById(String Id);
 
-    boolean existsById(Long id);
+    boolean existsById(String id);
 }

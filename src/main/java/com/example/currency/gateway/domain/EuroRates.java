@@ -59,7 +59,12 @@ public class EuroRates {
     @NonNull
     BigDecimal chfRate;
 
-    public EuroRates(Instant timestamp, @NonNull BigDecimal gbpRate, @NonNull BigDecimal usdRate, @NonNull BigDecimal audRate, @NonNull BigDecimal nzdRate, @NonNull BigDecimal cadRate, @NonNull BigDecimal jpyRate, @NonNull BigDecimal chfRate) {
+    @Column(name = "BGN")
+    @NonNull
+    BigDecimal bgnRate;
+
+    public EuroRates(Instant timestamp, @NonNull BigDecimal gbpRate, @NonNull BigDecimal usdRate, @NonNull BigDecimal audRate, @NonNull BigDecimal nzdRate, @NonNull BigDecimal cadRate, @NonNull BigDecimal jpyRate, @NonNull BigDecimal chfRate,
+                     @NonNull BigDecimal bgnRate) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.gbpRate = gbpRate;
@@ -69,6 +74,7 @@ public class EuroRates {
         this.cadRate = cadRate;
         this.jpyRate = jpyRate;
         this.chfRate = chfRate;
+        this.bgnRate = bgnRate;
     }
 
     public EuroRates(){

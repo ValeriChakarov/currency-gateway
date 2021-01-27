@@ -46,14 +46,15 @@ public class EuroRatesService {
     String directExchange;
 
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 600000)
     public void mapRestObjecttoDB() {
         RestTemplate restTemplate = new RestTemplate();
         FixerClient fixerClient = new FixerClient(restTemplate);
         ExchangeRates exchangeRates = fixerClient.getExchangeRates();
         EuroRates euroRates = new EuroRates(Instant.now(), exchangeRates.getRates().get("GBP"),
                 exchangeRates.getRates().get("USD"), exchangeRates.getRates().get("AUD"), exchangeRates.getRates().get("NZD"),
-                exchangeRates.getRates().get("CAD"), exchangeRates.getRates().get("JPY"), exchangeRates.getRates().get("CHF"));
+                exchangeRates.getRates().get("CAD"), exchangeRates.getRates().get("JPY"), exchangeRates.getRates().get("CHF"),
+                exchangeRates.getRates().get("BGN"));
         euroRatesRepository.save(euroRates);
         amqpTemplate.convertAndSend(directExchange, ratesCollectorRoutingkey, euroRates);
     }

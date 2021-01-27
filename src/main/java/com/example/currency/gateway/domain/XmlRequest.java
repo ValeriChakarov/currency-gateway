@@ -17,19 +17,15 @@ import java.io.Serializable;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@JacksonXmlRootElement(localName = "XmlRequest")
 public class XmlRequest implements Serializable {
 
     @Id
-    @JacksonXmlProperty(isAttribute = true)
-    Long requestId;
+    String requestId;
 
     @Column(name = "consumer")
-    @JacksonXmlProperty
-    Long consumer;
+    String consumer;
 
     @Column(name = "currency")
-    @JacksonXmlProperty
     String currency;
 
 }

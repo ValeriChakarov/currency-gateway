@@ -15,7 +15,7 @@ public class FixerClient {
     }
 
     public ExchangeRates getExchangeRates() {
-        String uri = "http://data.fixer.io/api/latest?access_key=e49bd5bd79a6c6ba91ede532f6880224&base=EUR&symbols=GBP,USD,AUD,NZD,CAD,JPY,CHF";
+        String uri = "http://data.fixer.io/api/latest?access_key=e49bd5bd79a6c6ba91ede532f6880224&base=EUR&symbols=GBP,USD,AUD,NZD,CAD,JPY,CHF,BGN";
         ExchangeRates rates = this.restTemplate.getForObject(uri, ExchangeRates.class);
         System.out.println("Rates:" + rates.getRates());
         return rates;
