@@ -91,9 +91,7 @@ public class EuroRatesService {
         ExchangeRates exchangeRates = fixerClient.getExchangeRates();
         ExchangeRates sixMonthsOldRates = fixerClient.getSixMonthsOldExchangeRates();
         BigDecimal usdDifference = exchangeRates.getRates().get(currency).subtract(sixMonthsOldRates.getRates().get(currency));
-        BigDecimal usdMarginPercentage = usdDifference.divide(sixMonthsOldRates.getRates().get(currency), 2, RoundingMode.HALF_UP)
+        return usdDifference.divide(sixMonthsOldRates.getRates().get(currency), 2, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100), mc);
-
-        return usdMarginPercentage;
     }
 }

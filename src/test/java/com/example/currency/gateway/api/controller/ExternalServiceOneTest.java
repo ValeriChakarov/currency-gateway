@@ -1,5 +1,8 @@
 package com.example.currency.gateway.api.controller;
 
+import com.example.currency.gateway.api.controller.dto.json.JsonRequestCurrent;
+import com.example.currency.gateway.api.controller.dto.json.JsonRequestHistory;
+import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.domain.JsonRequest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -9,16 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ExternalServiceOne.class)
@@ -30,23 +37,26 @@ class ExternalServiceOneTest {
     @MockBean
     private ExternalServiceOne externalServiceOne;
 
+//    {
+//        "requestId": "b89577fe-8c37-3962-3af3-3cb33a243133",
+//            "timestamp": 1586335186721,
+//            "client": "1234",
+//            "currency":"EUR"
+//    }
     @Test
-    void createRequestAndGetEURRates() {
-//        JsonRequest jsonRequest = new JsonRequest(UUID.randomUUID(), Timestamp.valueOf("2021-01-30"), Long.valueOf("1234"), "EUR");
-//        List<JsonRequest> jsonRequests = List.of(jsonRequest);
-//        Mockito.doReturn(jsonRequests).when(externalServiceOne).get;
-//
-//        mvc.perform(MockMvcRequestBuilders.get("/api/v1/guest/allGuests")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName", Matchers.is(guest.getFirstName())))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName", Matchers.is(guest.getLastName())))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].email", Matchers.is(guest.getEmail())))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].phoneNumber", Matchers.is(guest.getPhoneNumber())));
+    void createRequestAndGetEURRates() throws Exception {
+        JsonRequestCurrent jsonRequestCurrent = new JsonRequestCurrent(UUID.randomUUID(), Timestamp.valueOf("2021-01-31 00:00:00.000"),Long.valueOf(1234),"EUR");
+        EuroRates currentEuroRates = new EuroRates(UUID.randomUUID(), Instant.now(), BigDecimal.valueOf(1.21),
+                BigDecimal.valueOf(0.89), BigDecimal.valueOf(1.96));
+        Mockito.doReturn(ResponseEntity.ok(currentEuroRates)).when(externalServiceOne).createRequestAndGetEURRates(jsonRequestCurrent);
     }
 
     @Test
     void createRequestAndGetHistoricalEURRates() {
+        JsonRequestHistory jsonRequestHistory = new JsonRequestHistory(UUID.randomUUID(), Timestamp.valueOf("2021-01-31 00:00:00.000"),Long.valueOf(1234),"EUR", 24);
+        EuroRates euroRates = new EuroRates(UUID.randomUUID(), Instant.now(), BigDecimal.valueOf(1.21),
+                BigDecimal.valueOf(0.89), BigDecimal.valueOf(1.96));
+        List<EuroRates> euroRatesList = List.of(euroRates);
+        Mockito.doReturn(ResponseEntity.ok(euroRatesList)).when(externalServiceOne).createRequestAndGetHistoricalEURRates(jsonRequestHistory);
     }
 }

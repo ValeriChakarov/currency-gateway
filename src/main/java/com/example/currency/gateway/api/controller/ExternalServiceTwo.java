@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/xml_api/command")
+@RequestMapping("/api/v1/xml_api/command")
 public class ExternalServiceTwo {
 
     @Autowired

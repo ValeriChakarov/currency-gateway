@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/json_api")
+@RequestMapping("/api/v1/json_api")
 @RequiredArgsConstructor
 public class ExternalServiceOne {
 
