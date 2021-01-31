@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -16,9 +15,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "eurorates")
+@Table(name = "euro_rates")
 @Data
-@RequiredArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id", scope = EuroRates.class)
 public class EuroRates {
 
@@ -31,53 +29,26 @@ public class EuroRates {
     @NonNull
     Instant timestamp;
 
-    @Column(name = "GBP")
+    @Column(name = "gbp")
     @NonNull
     BigDecimal gbpRate;
 
-    @Column(name = "USD")
+    @Column(name = "usd")
     @NonNull
     BigDecimal usdRate;
 
-    @Column(name = "AUD")
-    @NonNull
-    BigDecimal audRate;
-
-    @Column(name = "NZD")
-    @NonNull
-    BigDecimal nzdRate;
-
-    @Column(name = "CAD")
-    @NonNull
-    BigDecimal cadRate;
-
-    @Column(name = "JPY")
-    @NonNull
-    BigDecimal jpyRate;
-
-    @Column(name = "CHF")
-    @NonNull
-    BigDecimal chfRate;
-
-    @Column(name = "BGN")
+    @Column(name = "bgn")
     @NonNull
     BigDecimal bgnRate;
 
-    public EuroRates(Instant timestamp, @NonNull BigDecimal gbpRate, @NonNull BigDecimal usdRate, @NonNull BigDecimal audRate, @NonNull BigDecimal nzdRate, @NonNull BigDecimal cadRate, @NonNull BigDecimal jpyRate, @NonNull BigDecimal chfRate,
-                     @NonNull BigDecimal bgnRate) {
+    public EuroRates(@NonNull Instant timestamp, @NonNull BigDecimal gbpRate, @NonNull BigDecimal usdRate, @NonNull BigDecimal bgnRate) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.gbpRate = gbpRate;
         this.usdRate = usdRate;
-        this.audRate = audRate;
-        this.nzdRate = nzdRate;
-        this.cadRate = cadRate;
-        this.jpyRate = jpyRate;
-        this.chfRate = chfRate;
         this.bgnRate = bgnRate;
     }
 
-    public EuroRates(){
-
+    public EuroRates() {
     }
 }

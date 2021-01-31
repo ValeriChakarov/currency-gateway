@@ -1,4 +1,4 @@
-package com.example.currency.gateway.services;
+package com.example.currency.gateway.exceptions;
 
 public class RequestIdAlreadyExistsException extends RuntimeException {
 

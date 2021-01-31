@@ -4,6 +4,7 @@ import com.example.currency.gateway.api.controller.dto.json.JsonRequestCurrent;
 import com.example.currency.gateway.api.controller.dto.json.JsonRequestHistory;
 import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.domain.JsonRequest;
+import com.example.currency.gateway.exceptions.RequestIdAlreadyExistsException;
 import com.example.currency.gateway.repositories.JsonRequestRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

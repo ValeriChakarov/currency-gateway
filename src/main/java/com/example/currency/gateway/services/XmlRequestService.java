@@ -1,10 +1,10 @@
 package com.example.currency.gateway.services;
 
 import com.example.currency.gateway.api.controller.dto.xmlcurrent.CommandId;
-import com.example.currency.gateway.api.controller.dto.xmlcurrent.XmlRequestHistory;
 import com.example.currency.gateway.api.controller.dto.xmlhistory.HistoryCommandId;
 import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.domain.XmlRequest;
+import com.example.currency.gateway.exceptions.RequestIdAlreadyExistsException;
 import com.example.currency.gateway.repositories.XmlRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class XmlRequestService {
+public class XmlRequestService{
 
     @Autowired
     XmlRequestRepository xmlRequestRepository;
@@ -41,5 +41,4 @@ public class XmlRequestService {
         }
         return euroRatesService.getHistoricalEuroRates(historyCommandId.getHistory().getPeriod());
     }
-
 }
