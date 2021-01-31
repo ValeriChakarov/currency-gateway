@@ -34,9 +34,6 @@ public class EuroRatesService {
     @Autowired
     EuroMarginsRepository euroMarginsRepository;
 
-    //    @PersistenceContext
-//    EntityManager entityManager;
-
     @Autowired
     private AmqpTemplate amqpTemplate;
 

@@ -62,7 +62,6 @@ public class JsonRequestService {
         } else {
             throw new RequestIdAlreadyExistsException("A request with this id already exists in the database!");
         }
-        List<EuroRates> historicalEuroRates = euroRatesService.getHistoricalEuroRates(jsonRequestHistory.getPeriod());
-        return historicalEuroRates;
+        return euroRatesService.getHistoricalEuroRates(jsonRequestHistory.getPeriod());
     }
 }

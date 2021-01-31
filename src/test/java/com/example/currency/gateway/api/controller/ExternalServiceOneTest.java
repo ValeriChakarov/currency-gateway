@@ -37,12 +37,6 @@ class ExternalServiceOneTest {
     @MockBean
     private ExternalServiceOne externalServiceOne;
 
-//    {
-//        "requestId": "b89577fe-8c37-3962-3af3-3cb33a243133",
-//            "timestamp": 1586335186721,
-//            "client": "1234",
-//            "currency":"EUR"
-//    }
     @Test
     void createRequestAndGetEURRates() throws Exception {
         JsonRequestCurrent jsonRequestCurrent = new JsonRequestCurrent(UUID.randomUUID(), Timestamp.valueOf("2021-01-31 00:00:00.000"),Long.valueOf(1234),"EUR");
