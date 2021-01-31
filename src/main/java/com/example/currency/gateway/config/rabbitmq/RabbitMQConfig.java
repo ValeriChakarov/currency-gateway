@@ -21,23 +21,39 @@ public class RabbitMQConfig {
 
     @Value("${rates.collector.rabbitmq.queue}")
     String ratesCollectorQueueName;
-    @Value("${statistics.collector.rabbitmq.queue}")
-    String statisticsCollectorQueueName;
+    @Value("${margins.collector.rabbitmq.queue}")
+    String marginsCollectorQueueName;
+    @Value("${request.current.rate.collector.rabbitmq.queue}")
+    String requestCurrentRateCollectorQueueName;
+    @Value("${request.historical.rate.collector.rabbitmq.queue}")
+    String requestHistoricalRateCollectorQueueName;
 
     @Value("${rates.collector.rabbitmq.routingkey}")
     private String ratesCollectorRoutingkey;
-    @Value("${statistics.collector.rabbitmq.routingkey}")
-    private String statisticsCollectorRoutingkey;
+    @Value("${margins.collector.rabbitmq.routingkey}")
+    private String marginsCollectorRoutingkey;
+    @Value("${request.current.rate.collector.rabbitmq.routingkey}")
+    private String requestCurrentRateCollectorRoutingkey;
+    @Value("${request.historical.rate.collector.rabbitmq.routingkey}")
+    private String requestHistoricalRateCollectorRoutingkey;
 
     @Bean
     Queue ratesCollectorQueue() {
         return new Queue(ratesCollectorQueueName, false);
     }
-    @Bean
-    Queue statisticsCollectorQueue() {
-        return new Queue(statisticsCollectorQueueName, false);
-    }
 
+    @Bean
+    Queue marginsCollectorQueue() {
+        return new Queue(marginsCollectorQueueName, false);
+    }
+    @Bean
+    Queue requestCurrentRateCollectorQueue() {
+        return new Queue(requestCurrentRateCollectorQueueName, false);
+    }
+    @Bean
+    Queue requestHistoricalRateCollectorQueue() {
+        return new Queue(requestHistoricalRateCollectorQueueName, false);
+    }
 
     @Bean
     DirectExchange exchange() {
@@ -48,9 +64,18 @@ public class RabbitMQConfig {
     Binding ratesCollectorBinding(Queue ratesCollectorQueue, DirectExchange exchange) {
         return BindingBuilder.bind(ratesCollectorQueue).to(exchange).with(ratesCollectorRoutingkey);
     }
+
     @Bean
-    Binding statisticsCollectorBinding(Queue statisticsCollectorQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(statisticsCollectorQueue).to(exchange).with(statisticsCollectorRoutingkey);
+    Binding marginsCollectorBinding(Queue marginsCollectorQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(marginsCollectorQueue).to(exchange).with(marginsCollectorRoutingkey);
+    }
+    @Bean
+    Binding requestCurrentRateCollectorBinding(Queue requestCurrentRateCollectorQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(requestCurrentRateCollectorQueue).to(exchange).with(requestCurrentRateCollectorRoutingkey);
+    }
+    @Bean
+    Binding requestHistoricalRateCollectorBinding(Queue requestHistoricalRateCollectorQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(requestHistoricalRateCollectorQueue).to(exchange).with(requestHistoricalRateCollectorRoutingkey);
     }
 
 

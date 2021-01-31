@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,26 +33,19 @@ public class EuroRatesService {
     @Autowired
     EuroMarginsRepository euroMarginsRepository;
 
-//    @Autowired
-//    RabbitMQSender rabbitMQSender;
+    //    @PersistenceContext
+//    EntityManager entityManager;
 
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    //    @PersistenceContext
-//    EntityManager entityManager;
-    @Value("${rates.collector.rabbitmq.queue}")
-    String ratesCollectorQueueName;
-    @Value("${statistics.collector.rabbitmq.queue}")
-    String statisticsCollectorQueueName;
+    @Value("${gateway.rabbitmq.exchange}")
+    String directExchange;
 
     @Value("${rates.collector.rabbitmq.routingkey}")
     private String ratesCollectorRoutingkey;
-    @Value("${statistics.collector.rabbitmq.routingkey}")
-    private String statisticsCollectorRoutingkey;
-
-    @Value("${gateway.rabbitmq.exchange}")
-    String directExchange;
+    @Value("${margins.collector.rabbitmq.routingkey}")
+    private String marginsCollectorRoutingkey;
 
     /**
      * Scheduled to run once an hour.
@@ -65,9 +57,21 @@ public class EuroRatesService {
         ExchangeRates exchangeRates = fixerClient.getExchangeRates();
         EuroRates euroRates = new EuroRates(Instant.now(), exchangeRates.getRates().get("GBP"),
                 exchangeRates.getRates().get("USD"), exchangeRates.getRates().get("BGN"));
-        euroRatesRepository.save(euroRates);
         amqpTemplate.convertAndSend(directExchange, ratesCollectorRoutingkey, euroRates);
+        euroRatesRepository.save(euroRates);
+        ;
     }
+
+    /**
+     * Scheduled to run once a week
+     */
+    @Scheduled(fixedRate = 604800000)
+    public void getMargins() {
+        EuroMargins euroMargins = new EuroMargins(LocalDate.now(), getSingleMargin("USD"), getSingleMargin("GBP"), getSingleMargin("BGN"));
+        amqpTemplate.convertAndSend(directExchange, marginsCollectorRoutingkey, euroMargins);
+        euroMarginsRepository.save(euroMargins);
+    }
+
 
     public Optional<EuroRates> getCurrentEuroRates() {
         return euroRatesRepository.getCurrentEuroRates();
@@ -76,34 +80,19 @@ public class EuroRatesService {
     public List<EuroRates> getHistoricalEuroRates(Integer period) {
         Instant endTime = Instant.now();
         Instant startTime = endTime.minus(period, ChronoUnit.HOURS);
-        amqpTemplate.convertAndSend(directExchange, statisticsCollectorRoutingkey, euroRatesRepository.getHistoricalEuroRates(startTime, endTime));
         return euroRatesRepository.getHistoricalEuroRates(startTime, endTime);
     }
 
-    /**
-     * Scheduled to run once a week
-     */
-    @Scheduled(fixedRate = 604800000)
-    public void getMargins() {
+    public BigDecimal getSingleMargin(String currency) {
         MathContext mc = new MathContext(2);
         RestTemplate restTemplate = new RestTemplate();
         FixerClient fixerClient = new FixerClient(restTemplate);
         ExchangeRates exchangeRates = fixerClient.getExchangeRates();
         ExchangeRates sixMonthsOldRates = fixerClient.getSixMonthsOldExchangeRates();
-        BigDecimal usdDifference = exchangeRates.getRates().get("USD").subtract(sixMonthsOldRates.getRates().get("USD"));
-        BigDecimal usdMargin = usdDifference.divide(sixMonthsOldRates.getRates().get("USD"), 3, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100),mc);
+        BigDecimal usdDifference = exchangeRates.getRates().get(currency).subtract(sixMonthsOldRates.getRates().get(currency));
+        BigDecimal usdMarginPercentage = usdDifference.divide(sixMonthsOldRates.getRates().get(currency), 2, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100), mc);
 
-        BigDecimal gbpDifference = exchangeRates.getRates().get("GBP").subtract(sixMonthsOldRates.getRates().get("GBP"));
-        BigDecimal gbpMargin = gbpDifference.divide(sixMonthsOldRates.getRates().get("GBP"), 3, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100),mc);
-
-        BigDecimal bgnDifference = exchangeRates.getRates().get("BGN").subtract(sixMonthsOldRates.getRates().get("BGN"));
-        BigDecimal bgnMargin = bgnDifference.divide(sixMonthsOldRates.getRates().get("BGN"), 3, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100),mc);
-
-        EuroMargins euroMargins = new EuroMargins(LocalDate.now(), usdMargin, gbpMargin, bgnMargin);
-        euroMarginsRepository.save(euroMargins);
+        return usdMarginPercentage;
     }
-
 }
