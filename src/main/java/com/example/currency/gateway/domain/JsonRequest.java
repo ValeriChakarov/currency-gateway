@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table(name="jsonRequests")
+@Table(name = "jsonRequests")
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor

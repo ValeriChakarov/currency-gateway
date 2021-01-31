@@ -19,6 +19,14 @@ public class RabbitMQConfig {
     @Value("${gateway.rabbitmq.exchange}")
     String directExchange;
 
+    /**
+     *
+     * The aim here is create exchange of direct type for four different queues.
+     * 1. Request Current Rate - Queue containing the requests for current rates for all three pairs considered (EUR/USD, EUR/GBP, EUR/BGN).
+     * 2. Request Historical Rate - Queue containing the requests for historical rates for all three pairs considered.
+     * 3. Rates Collector - Queue which contains the stream of rates updated ever hour.
+     * 4. Margins Collector - Queue which contains the stream of 6-month margin difference of the rates.
+     */
     @Value("${rates.collector.rabbitmq.queue}")
     String ratesCollectorQueueName;
     @Value("${margins.collector.rabbitmq.queue}")
@@ -83,10 +91,4 @@ public class RabbitMQConfig {
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
-//    public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-//        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-//        return rabbitTemplate;
-//    }
 }

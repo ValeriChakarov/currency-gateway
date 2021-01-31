@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class XmlRequestService{
+public class XmlRequestService {
 
     @Autowired
     XmlRequestRepository xmlRequestRepository;
@@ -31,6 +31,7 @@ public class XmlRequestService{
         }
         return euroRatesService.getCurrentEuroRates();
     }
+
     public List<EuroRates> createHistoryRequest(HistoryCommandId historyCommandId) {
         if (!xmlRequestRepository.existsById(historyCommandId.getId())) {
             XmlRequest xmlRequestToSave = new XmlRequest(historyCommandId.getId(), historyCommandId.getHistory().getConsumer(),

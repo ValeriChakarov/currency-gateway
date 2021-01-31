@@ -1,7 +1,6 @@
 package com.example.currency.gateway.api.controller;
 
 import com.example.currency.gateway.api.controller.dto.xmlcurrent.CommandId;
-import com.example.currency.gateway.api.controller.dto.xmlcurrent.XmlRequestHistory;
 import com.example.currency.gateway.api.controller.dto.xmlhistory.HistoryCommandId;
 import com.example.currency.gateway.domain.EuroRates;
 import com.example.currency.gateway.services.XmlRequestService;
@@ -23,13 +22,13 @@ public class ExternalServiceTwo {
     @Autowired
     XmlRequestService xmlRequestService;
 
-    @PostMapping(value ="/current", produces= MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<Optional<EuroRates>> createRequestAndGetEURRates(@RequestBody CommandId commandId){
+    @PostMapping(value = "/current", produces = MediaType.APPLICATION_XML_VALUE)
+    public ResponseEntity<Optional<EuroRates>> createRequestAndGetEURRates(@RequestBody CommandId commandId) {
         return ResponseEntity.ok(xmlRequestService.createCurrentRequest(commandId));
     }
 
     @PostMapping("/history")
-    public ResponseEntity<List<EuroRates>> createRequestAndGetHistoricalEURRates(@RequestBody HistoryCommandId historyCommandId){
+    public ResponseEntity<List<EuroRates>> createRequestAndGetHistoricalEURRates(@RequestBody HistoryCommandId historyCommandId) {
         return ResponseEntity.ok(xmlRequestService.createHistoryRequest(historyCommandId));
     }
 }
