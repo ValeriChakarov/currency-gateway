@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +56,7 @@ public class EuroRatesService {
         RestTemplate restTemplate = new RestTemplate();
         FixerClient fixerClient = new FixerClient(restTemplate);
         ExchangeRates exchangeRates = fixerClient.getExchangeRates();
-        EuroRates euroRates = new EuroRates(Instant.now(), exchangeRates.getRates().get("GBP"),
+        EuroRates euroRates = new EuroRates(UUID.randomUUID(),Instant.now(), exchangeRates.getRates().get("GBP"),
                 exchangeRates.getRates().get("USD"), exchangeRates.getRates().get("BGN"));
         amqpTemplate.convertAndSend(directExchange, ratesCollectorRoutingkey, euroRates);
         euroRatesRepository.save(euroRates);

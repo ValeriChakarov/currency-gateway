@@ -3,7 +3,9 @@ package com.example.currency.gateway.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -17,7 +19,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "euro_rates")
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id", scope = EuroRates.class)
+@RequiredArgsConstructor
+@NoArgsConstructor
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = EuroRates.class)
 public class EuroRates {
 
     @Id
@@ -40,15 +44,4 @@ public class EuroRates {
     @Column(name = "bgn")
     @NonNull
     BigDecimal bgnRate;
-
-    public EuroRates(@NonNull Instant timestamp, @NonNull BigDecimal gbpRate, @NonNull BigDecimal usdRate, @NonNull BigDecimal bgnRate) {
-        this.id = UUID.randomUUID();
-        this.timestamp = timestamp;
-        this.gbpRate = gbpRate;
-        this.usdRate = usdRate;
-        this.bgnRate = bgnRate;
-    }
-
-    public EuroRates() {
-    }
 }
